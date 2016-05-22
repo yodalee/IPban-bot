@@ -1,3 +1,5 @@
+#coding=utf-8
+
 import webapp2
 from google.appengine.api import urlfetch
 
@@ -7,18 +9,18 @@ import random
 FBtoken = "Fan book Token Here"
 
 ResponsePattern = [
-    '太強啦',
-    '太神啦',
-    '太狂啦',
-    '太猛啦',
-    '太潮啦',
-    'worship',
-    '大大太強了',
-    '為什麼你可以這麼厲害',
-    '太強了我要跪了',
-    '看來我還是去吃土吧'
-    '太強啦RRRRRRR'
-    '(worship)']
+    u'太強啦',
+    u'太神啦',
+    u'太狂啦',
+    u'太猛啦',
+    u'太潮啦',
+    u'worship',
+    u'大大太強了',
+    u'為什麼你可以這麼厲害',
+    u'太強了我要跪了',
+    u'看來我還是去吃土吧',
+    u'太強啦RRRRRRR',
+    u'(worship)']
 
 
 class MainPage(webapp2.RequestHandler):
@@ -42,7 +44,8 @@ class FBwebhook(webapp2.RequestHandler):
                 payload=response_message,
                 method=urlfetch.POST)
 
-        print(u"[{}] reply to {}: {}".format(result, to, message))
+        print("[{}] reply to {}: {}".format(
+            result, to.encode('utf-8'), message))
 
     def get(self):
         verification_code = "Verification code"
@@ -65,7 +68,7 @@ class FBwebhook(webapp2.RequestHandler):
                     text = message['message']['text']
                     print(u"{} says {}".format(sender, text))
 
-                message = random.choice(ResponsePattern)
+                message = random.choice(ResponsePattern).encode('utf-8')
                 self.send_fb_message(sender, message)
 
 
