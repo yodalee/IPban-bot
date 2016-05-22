@@ -6,4 +6,5 @@ threadsafe: true
 
 handlers:
 - url: /.*
-  script: ipban.app 
+  script: ipban.app
+  secure: optional
