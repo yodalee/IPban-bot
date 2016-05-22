@@ -1,4 +1,9 @@
-#coding=utf-8
+#-*- coding: UTF-8 -*-
+#/usr/bin/env python
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 
 import webapp2
 from google.appengine.api import urlfetch
