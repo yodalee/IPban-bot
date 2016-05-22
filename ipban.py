@@ -1,9 +1,24 @@
 import webapp2
-import json
 from google.appengine.api import urlfetch
 
+import json
+import random
 
 FBtoken = "Fan book Token Here"
+
+ResponsePattern = [
+    '太強啦',
+    '太神啦',
+    '太狂啦',
+    '太猛啦',
+    '太潮啦',
+    'worship',
+    '大大太強了',
+    '為什麼你可以這麼厲害',
+    '太強了我要跪了',
+    '看來我還是去吃土吧'
+    '太強啦RRRRRRR'
+    '(worship)']
 
 
 class MainPage(webapp2.RequestHandler):
@@ -27,7 +42,7 @@ class FBwebhook(webapp2.RequestHandler):
                 payload=response_message,
                 method=urlfetch.POST)
 
-        print("[{}] reply to {}: {}".format(result, to, message))
+        print(u"[{}] reply to {}: {}".format(result, to, message))
 
     def get(self):
         verification_code = "Verification code"
@@ -48,8 +63,10 @@ class FBwebhook(webapp2.RequestHandler):
                 sender = message['sender']['id']
                 if message.get('message'):
                     text = message['message']['text']
-                    print("{} says {}".format(sender, text))
-                self.send_fb_message(sender, "Hi")
+                    print(u"{} says {}".format(sender, text))
+
+                message = random.choice(ResponsePattern)
+                self.send_fb_message(sender, message)
 
 
 app = webapp2.WSGIApplication([
