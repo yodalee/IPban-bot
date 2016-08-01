@@ -4,6 +4,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
+import logging
 
 import webapp2
 from google.appengine.api import urlfetch
@@ -41,19 +42,19 @@ class FBwebhook(webapp2.RequestHandler):
         response_message = json.dumps(
             {"recipient": {"id": to},
              "message": {"text": message}})
-        print(post_url)
-        print(response_message)
+        logging.info(post_url)
+        logging.info(response_message)
         result = urlfetch.fetch(
                 url=post_url,
                 headers={"Content-Type": "application/json"},
                 payload=response_message,
                 method=urlfetch.POST)
 
-        print("[{}] reply to {}: {}".format(
+        logging.info("[{}] reply to {}: {}".format(
             result, to.encode('utf-8'), message))
 
     def get(self):
-        verification_code = "Verification code"
+        verification_code = "IPBanIsTheWeakestPersonInTheWorld"
         verify_token = self.request.get('hub.verify_token')
         verify_challenge = self.request.get('hub.challenge')
         if verification_code == verify_token:
@@ -62,7 +63,7 @@ class FBwebhook(webapp2.RequestHandler):
             self.response.write("Error, wrong validation token")
 
     def post(self):
-        print(self.request.body)
+        logging.info(self.request.body)
         message_entry = json.loads(self.request.body)['entry']
 
         for entry in message_entry:
@@ -70,10 +71,11 @@ class FBwebhook(webapp2.RequestHandler):
             for message in messagings:
                 sender = message['sender']['id']
                 if message.get('message'):
-                    text = message['message']['text']
-                    print(u"{} says {}".format(sender, text))
+                    text = message['message']['text'].encode('utf-8')
+                    logging.info(u"{} says {}".format(sender, text))
 
                 message = random.choice(ResponsePattern).encode('utf-8')
+                logging.info(message)
                 self.send_fb_message(sender, message)
 
 
